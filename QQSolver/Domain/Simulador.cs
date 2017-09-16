@@ -14,33 +14,33 @@ namespace QQSolver.Domain
 
         private static IEnumerable<Valor> ListarUnariosBase()
         {
-            var original = new Valor(1, 4, 0).FormatterPuro(false);
+            var original = new Valor(1, 4, HistoricoOperacao.Vazio()).FormatterPuro(false);
 
             if (Operacoes.Raiz)
             {
-                yield return new Valor(1, 2, 1).FormatterRaiz(original, false);
-                yield return new Valor(1, -2, 1).FormatterRaiz(original, true);
+                yield return new Valor(1, 2, HistoricoOperacao.OperacaoUnaria()).FormatterRaiz(original, false);
+                yield return new Valor(1, -2, HistoricoOperacao.OperacaoUnaria()).FormatterRaiz(original, true);
             }
 
             yield return original;
-            yield return new Valor(1, -4, 0).FormatterPuro(true);
+            yield return new Valor(1, -4, HistoricoOperacao.Vazio()).FormatterPuro(true);
 
             if (Operacoes.Terminal)
             {
-                yield return new Valor(1, 10, 1).FormatterTermial(original, false);
-                yield return new Valor(1, -10, 1).FormatterTermial(original, true);
+                yield return new Valor(1, 10, HistoricoOperacao.OperacaoUnaria()).FormatterTermial(original, false);
+                yield return new Valor(1, -10, HistoricoOperacao.OperacaoUnaria()).FormatterTermial(original, true);
             }
 
             if (Operacoes.Fatorial)
             {
-                yield return new Valor(1, 24, 1).FormatterFatorial(original, false);
-                yield return new Valor(1, -24, 1).FormatterFatorial(original, true);
+                yield return new Valor(1, 24, HistoricoOperacao.OperacaoUnaria()).FormatterFatorial(original, false);
+                yield return new Valor(1, -24, HistoricoOperacao.OperacaoUnaria()).FormatterFatorial(original, true);
             }
         }
 
         private static IEnumerable<Valor> ListarBinarioBase()
         {
-            var original = new Valor(2, 44, 0).FormatterPuro(false);
+            var original = new Valor(2, 44, HistoricoOperacao.Vazio()).FormatterPuro(false);
 
             //if (Operacoes.Raiz)
             //{
@@ -49,18 +49,18 @@ namespace QQSolver.Domain
             //}
 
             yield return original;
-            yield return new Valor(2, -44, 0).FormatterPuro(true);
+            yield return new Valor(2, -44, HistoricoOperacao.Vazio()).FormatterPuro(true);
 
             if (Operacoes.Terminal)
             {
-                yield return new Valor(2, Dicionarios.TermialHashSet[44], 1).FormatterTermial(original, false);
-                yield return new Valor(2, -Dicionarios.TermialHashSet[44], 1).FormatterTermial(original, true);
+                yield return new Valor(2, Dicionarios.TermialHashSet[44], HistoricoOperacao.OperacaoUnaria()).FormatterTermial(original, false);
+                yield return new Valor(2, -Dicionarios.TermialHashSet[44], HistoricoOperacao.OperacaoUnaria()).FormatterTermial(original, true);
             }
         }
 
         private static IEnumerable<Valor> ListarTernarioBase()
         {
-            var original = new Valor(3, 444, 0).FormatterPuro(false);
+            var original = new Valor(3, 444, HistoricoOperacao.Vazio()).FormatterPuro(false);
 
             //if (Operacoes.Raiz)
             //{
@@ -69,18 +69,18 @@ namespace QQSolver.Domain
             //}
 
             yield return original;
-            yield return new Valor(3, -444, 0).FormatterPuro(true);
+            yield return new Valor(3, -444, HistoricoOperacao.Vazio()).FormatterPuro(true);
 
             if (Operacoes.Terminal)
             {
-                yield return new Valor(3, Dicionarios.TermialHashSet[444], 1).FormatterTermial(original, false);
-                yield return new Valor(3, -Dicionarios.TermialHashSet[444], 1).FormatterTermial(original, true);
+                yield return new Valor(3, Dicionarios.TermialHashSet[444], HistoricoOperacao.OperacaoUnaria()).FormatterTermial(original, false);
+                yield return new Valor(3, -Dicionarios.TermialHashSet[444], HistoricoOperacao.OperacaoUnaria()).FormatterTermial(original, true);
             }
         }
 
         private static IEnumerable<Valor> ListarQuaternarioBase()
         {
-            var original = new Valor(4, 4444, 0).FormatterPuro(false);
+            var original = new Valor(4, 4444, HistoricoOperacao.Vazio()).FormatterPuro(false);
 
             //if (Operacoes.Raiz)
             //{
@@ -89,19 +89,19 @@ namespace QQSolver.Domain
             //}
 
             yield return original;
-            yield return new Valor(4, -4444, 0).FormatterPuro(true);
+            yield return new Valor(4, -4444, HistoricoOperacao.Vazio()).FormatterPuro(true);
 
             if (Operacoes.Terminal)
             {
-                yield return new Valor(4, Dicionarios.TermialHashSet[4444], 1).FormatterTermial(original, false);
-                yield return new Valor(4, -Dicionarios.TermialHashSet[4444], 1).FormatterTermial(original, true);
+                yield return new Valor(4, Dicionarios.TermialHashSet[4444], HistoricoOperacao.OperacaoUnaria()).FormatterTermial(original, false);
+                yield return new Valor(4, -Dicionarios.TermialHashSet[4444], HistoricoOperacao.OperacaoUnaria()).FormatterTermial(original, true);
             }
         }
 
         private static IEnumerable<Valor> ListarOperacao(Valor v1, Valor v2)
         {
             int peso = v1.Peso + v2.Peso;
-            int nivelOperacoes = v1.NivelOperacoes + v2.NivelOperacoes + 1;
+            var historicoOperacionalGeral = v1.HistoricoOperacao.Somar(v2.HistoricoOperacao);
             double aux;
 
             //if (Operacoes.Subtracao && Subtrair(v1.Resultado, v2.Resultado, out aux))
@@ -118,28 +118,32 @@ namespace QQSolver.Domain
 
             if (Operacoes.Soma && Somar(v1.Resultado, v2.Resultado, out aux))
             {
-                yield return new Valor(peso, aux, nivelOperacoes).FormatterSoma(v1, v2, false);
-                if(aux != 0) yield return new Valor(peso, -aux, nivelOperacoes).FormatterSoma(v1, v2, true);
+                var historico = historicoOperacionalGeral.RegistrarAdicao() ;
+                yield return new Valor(peso, aux, historico).FormatterSoma(v1, v2, false);
+                if(aux != 0) yield return new Valor(peso, -aux, historico).FormatterSoma(v1, v2, true);
             }
 
             if (Operacoes.Multiplicacao && Multiplicar(v1.Resultado, v2.Resultado, out aux))
             {
-                yield return new Valor(peso, aux, nivelOperacoes).FormatterMultiplicacao(v1, v2, false);
-                if (aux != 0) yield return new Valor(peso, -aux, nivelOperacoes).FormatterMultiplicacao(v1, v2, true);
+                var historico = historicoOperacionalGeral.RegistrarMultiplicacao();
+                yield return new Valor(peso, aux, historico).FormatterMultiplicacao(v1, v2, false);
+                if (aux != 0) yield return new Valor(peso, -aux, historico).FormatterMultiplicacao(v1, v2, true);
             }
 
             if (Operacoes.Divisao)
             {
                 if (v2.Resultado != 0 && Dividir(v1.Resultado, v2.Resultado, out aux))
                 {
-                    yield return new Valor(peso, aux, nivelOperacoes).FormatterDivisao(v1, v2, false);
-                    if (aux != 0) yield return new Valor(peso, -aux, nivelOperacoes).FormatterDivisao(v1, v2, true);
+                    var historico = historicoOperacionalGeral.RegistrarMultiplicacao();
+                    yield return new Valor(peso, aux, historico).FormatterDivisao(v1, v2, false);
+                    if (aux != 0) yield return new Valor(peso, -aux, historico).FormatterDivisao(v1, v2, true);
                 }
 
                 if (v1.Resultado != 0 && Dividir(v2.Resultado, v1.Resultado, out aux))
                 {
-                    yield return new Valor(peso, aux, nivelOperacoes).FormatterDivisao(v2, v1, false);
-                    if (aux != 0) yield return new Valor(peso, -aux, nivelOperacoes).FormatterDivisao(v2, v1, true);
+                    var historico = historicoOperacionalGeral.RegistrarMultiplicacao();
+                    yield return new Valor(peso, aux, historico).FormatterDivisao(v2, v1, false);
+                    if (aux != 0) yield return new Valor(peso, -aux, historico).FormatterDivisao(v2, v1, true);
                 }
             }
 
@@ -147,14 +151,16 @@ namespace QQSolver.Domain
             {
                 if (Exponenciar(v1.Resultado, v2.Resultado, out aux))
                 {
-                    yield return new Valor(peso, aux, nivelOperacoes).FormatterPotenciacao(v1, v2, false);
-                    if (aux != 0) yield return new Valor(peso, -aux, nivelOperacoes).FormatterPotenciacao(v1, v2, true);
+                    var historico = historicoOperacionalGeral.RegistrarExponencial();
+                    yield return new Valor(peso, aux, historico).FormatterPotenciacao(v1, v2, false);
+                    if (aux != 0) yield return new Valor(peso, -aux, historico).FormatterPotenciacao(v1, v2, true);
                 }
 
                 if (Exponenciar(v2.Resultado, v1.Resultado, out aux))
                 {
-                    yield return new Valor(peso, aux, nivelOperacoes).FormatterPotenciacao(v2, v1, false);
-                    if (aux != 0) yield return new Valor(peso, -aux, nivelOperacoes).FormatterPotenciacao(v2, v1, true);
+                    var historico = historicoOperacionalGeral.RegistrarExponencial();
+                    yield return new Valor(peso, aux, historico).FormatterPotenciacao(v2, v1, false);
+                    if (aux != 0) yield return new Valor(peso, -aux, historico).FormatterPotenciacao(v2, v1, true);
                 }
             }
         }
@@ -274,6 +280,11 @@ namespace QQSolver.Domain
             var ternarios = ListarTernarios(unarios, binarios).DistinctOperacao().ToList();
 
             return ListarQuaternarios(unarios, binarios, ternarios);
+        }
+
+        public static IEnumerable<Valor> ListarVariacoes(double resultado)
+        {
+            return ListarTodos().Where(x => x.Resultado == resultado);
         }
     }
 }

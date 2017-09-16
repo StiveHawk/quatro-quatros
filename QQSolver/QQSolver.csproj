@@ -46,6 +46,7 @@
     <Compile Include="Domain\Formatter\BinarioFormatter.cs" />
     <Compile Include="Domain\Formatter\IValorFormatter.cs" />
     <Compile Include="Domain\Formatter\UnarioFormatter.cs" />
+    <Compile Include="Domain\HistoricoOperacao.cs" />
     <Compile Include="Domain\OutputNaturais.cs" />
     <Compile Include="Domain\Simulador.cs" />
     <Compile Include="Domain\SimuladorOperacoes.cs" />

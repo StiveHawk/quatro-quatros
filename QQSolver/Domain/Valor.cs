@@ -7,28 +7,61 @@ using System.Threading.Tasks;
 
 namespace QQSolver.Domain
 {
-    public class Valor
+    public class Valor : IComparable<Valor>
     {
         public int Peso;
         public double Resultado;
-        public int NivelOperacoes;
+        public HistoricoOperacao HistoricoOperacao;
 
         public bool Inteiro;
         public bool Positivo;
         public bool Puro;
 
         public IValorFormatter Formatter;
-        public string Operacao {  get { return Formatter.Flush(); } }
+        public string OperacaoExtenso {  get { return Formatter.Flush(); } }
 
-        public Valor(int representacao, double resultado, int nivelOperacoes)
+
+
+        public Valor(int representacao, double resultado, HistoricoOperacao historicoOperacao)
         {
             this.Peso = representacao;
             this.Resultado = resultado;
-            this.NivelOperacoes = nivelOperacoes;
+            this.HistoricoOperacao = historicoOperacao;
 
             this.Inteiro = (Resultado > int.MinValue && Resultado < int.MaxValue && Resultado % 1 == 0);
             this.Positivo = (Resultado > 0);
-            this.Puro = (NivelOperacoes == 0);
+            this.Puro = (HistoricoOperacao.QuantidadeOperacoes == 0);
+        }
+
+        public int CompareTo(Valor valor)
+        {
+            // 1 = Mais complexo
+            // -1 = Menos complexo
+
+            if (HistoricoOperacao.QuantidadeOperacoes < valor.HistoricoOperacao.QuantidadeOperacoes) return -1;
+            if (HistoricoOperacao.QuantidadeOperacoes > valor.HistoricoOperacao.QuantidadeOperacoes) return 1;
+
+            if (HistoricoOperacao.Unario < valor.HistoricoOperacao.Unario) return -1;
+            if (HistoricoOperacao.Unario > valor.HistoricoOperacao.Unario) return 1;
+
+            if (HistoricoOperacao.Exponencial < valor.HistoricoOperacao.Exponencial) return -1;
+            if (HistoricoOperacao.Exponencial > valor.HistoricoOperacao.Exponencial) return 1;
+
+            if (HistoricoOperacao.Multiplicativo < valor.HistoricoOperacao.Multiplicativo) return -1;
+            if (HistoricoOperacao.Multiplicativo > valor.HistoricoOperacao.Multiplicativo) return 1;
+
+            if (Formatter.Negativacoes() < valor.Formatter.Negativacoes()) return -1;
+            if (Formatter.Negativacoes() > valor.Formatter.Negativacoes()) return 1;
+
+            if (HistoricoOperacao.Aditivo < valor.HistoricoOperacao.Aditivo) return -1;
+            if (HistoricoOperacao.Aditivo > valor.HistoricoOperacao.Aditivo) return 1;
+
+            return 0;
+        }
+
+        public bool MenosComplexoQue(Valor valor)
+        {
+            return CompareTo(valor) == -1;
         }
 
         private IEnumerable<Valor> ListarOperacoesUnarias()
@@ -37,6 +70,8 @@ namespace QQSolver.Domain
             {
                 if (Positivo && Inteiro)
                 {
+                    var historico = HistoricoOperacao.RegistrarUnario();
+
                     if (Simulador.Operacoes.Fatorial && Resultado < long.MaxValue && Resultado > 2)
                     {
                         long lAux;
@@ -44,8 +79,8 @@ namespace QQSolver.Domain
 
                         if (Dicionarios.FatorialHashSet.TryGetValue(resultadoLong, out lAux))
                         {
-                            yield return new Valor(Peso, lAux, NivelOperacoes + 1).FormatterFatorial(this, false);
-                            yield return new Valor(Peso, -lAux, NivelOperacoes + 1).FormatterFatorial(this, true);
+                            yield return new Valor(Peso, lAux, historico).FormatterFatorial(this, false);
+                            yield return new Valor(Peso, -lAux, historico).FormatterFatorial(this, true);
                         }
                     }
 
@@ -56,8 +91,8 @@ namespace QQSolver.Domain
 
                         if (Dicionarios.TermialHashSet.TryGetValue(resultadoInt, out iAux) && iAux != Resultado)
                         {
-                            yield return new Valor(Peso, iAux, NivelOperacoes + 1).FormatterTermial(this, false);
-                            yield return new Valor(Peso, -iAux, NivelOperacoes + 1).FormatterTermial(this, true);
+                            yield return new Valor(Peso, iAux, historico).FormatterTermial(this, false);
+                            yield return new Valor(Peso, -iAux, historico).FormatterTermial(this, true);
                         }
                     }
                 }

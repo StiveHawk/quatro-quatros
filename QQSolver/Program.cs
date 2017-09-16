@@ -17,7 +17,7 @@ namespace QQSolver
             sw.Start();
             var naturais = OutputNaturais.Processar(Simulador.ListarApenasMelhores());
             sw.Stop();
-
+            
             naturais.EscreverEmArquivo("Naturais.txt");
             //naturais.EscreverEmConsole();
             

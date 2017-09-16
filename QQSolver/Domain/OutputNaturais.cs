@@ -26,15 +26,8 @@ namespace QQSolver.Domain
                 
                 Valor antigo = null;
 
-                if
-                (
-                    !MelhoresValores.TryGetValue(resultado, out antigo) ||
-                    antigo.NivelOperacoes > valor.NivelOperacoes ||
-                    (antigo.NivelOperacoes == valor.NivelOperacoes && antigo.Formatter.Negativacoes() > valor.Formatter.Negativacoes())
-                )
-                {
+                if(!MelhoresValores.TryGetValue(resultado, out antigo) || valor.MenosComplexoQue(antigo))
                     MelhoresValores[resultado] = valor;
-                }
             }
         }
 
@@ -45,7 +38,7 @@ namespace QQSolver.Domain
 
         private string FormatarValor(Valor valor)
         {
-            return $"{valor.Resultado.ToString("#0")}: {valor.Operacao}";
+            return $"{valor.Resultado.ToString("#0")}: {valor.OperacaoExtenso}";
         }
 
         public void EscreverEmArquivo(string caminhoArquivo)

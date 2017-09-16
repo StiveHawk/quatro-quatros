@@ -14,7 +14,7 @@ namespace QQSolver.Domain
 
             foreach (var valor in valores)
             {
-                string text = valor.Operacao;
+                string text = valor.OperacaoExtenso;
                 if (!hash.Contains(text))
                 {
                     hash.Add(text);
@@ -30,7 +30,8 @@ namespace QQSolver.Domain
             foreach (var valor in valores)
             {
                 Valor antigo = null;
-                if (!melhores.TryGetValue(valor.Resultado, out antigo) || antigo.NivelOperacoes > valor.NivelOperacoes)
+                
+                if (!melhores.TryGetValue(valor.Resultado, out antigo) || valor.MenosComplexoQue(antigo))
                     melhores[valor.Resultado] = valor;
             }
 

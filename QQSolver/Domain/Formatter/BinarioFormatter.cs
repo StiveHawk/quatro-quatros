@@ -42,7 +42,7 @@ namespace QQSolver.Domain.Formatter
             if (Resultado == null)
             {
                 if(ResultadoNegativo)
-                    Resultado = $"-({Valor1.Formatter.Flush()} {Operador} {Valor2.Formatter.Flush()})";
+                    Resultado = $"(-({Valor1.Formatter.Flush()} {Operador} {Valor2.Formatter.Flush()}))";
                 else
                     Resultado = $"({Valor1.Formatter.Flush()} {Operador} {Valor2.Formatter.Flush()})";
             }

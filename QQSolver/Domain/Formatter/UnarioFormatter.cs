@@ -45,7 +45,7 @@ namespace QQSolver.Domain.Formatter
             {
                 if (Resultado == null)
                 {
-                    if (ResultadoNegativo) Resultado = $"-(({Valor.Formatter.Flush()})!)";
+                    if (ResultadoNegativo) Resultado = $"(-({Valor.Formatter.Flush()})!)";
                     else Resultado = $"({Valor.Formatter.Flush()})!";
                 }
 
@@ -75,7 +75,7 @@ namespace QQSolver.Domain.Formatter
             {
                 if (Resultado == null)
                 {
-                    if (ResultadoNegativo) Resultado = $"-(({Valor.Formatter.Flush()})?)";
+                    if (ResultadoNegativo) Resultado = $"(-({Valor.Formatter.Flush()})?)";
                     else Resultado = $"({Valor.Formatter.Flush()})?";
                 }
 
