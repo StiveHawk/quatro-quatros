@@ -42,11 +42,11 @@ namespace QQSolver.Domain
         {
             var original = new Valor(2, 44, 0).FormatterPuro();
 
-            if (Operacoes.Raiz)
-            {
-                yield return new Valor(2, Math.Sqrt(44), 1).FormatterRaiz(original, false);
-                yield return new Valor(2, -Math.Sqrt(44), 1).FormatterRaiz(original, true);
-            }
+            //if (Operacoes.Raiz)
+            //{
+            //    yield return new Valor(2, Math.Sqrt(44), 1).FormatterRaiz(original, false);
+            //    yield return new Valor(2, -Math.Sqrt(44), 1).FormatterRaiz(original, true);
+            //}
 
             yield return original;
             yield return new Valor(2, -44, 0).FormatterPuro();
@@ -62,11 +62,11 @@ namespace QQSolver.Domain
         {
             var original = new Valor(3, 444, 0).FormatterPuro();
 
-            if (Operacoes.Raiz)
-            {
-                yield return new Valor(3, Math.Sqrt(444), 1).FormatterRaiz(original, false);
-                yield return new Valor(3, -Math.Sqrt(444), 1).FormatterRaiz(original, true);
-            }
+            //if (Operacoes.Raiz)
+            //{
+            //    yield return new Valor(3, Math.Sqrt(444), 1).FormatterRaiz(original, false);
+            //    yield return new Valor(3, -Math.Sqrt(444), 1).FormatterRaiz(original, true);
+            //}
 
             yield return original;
             yield return new Valor(3, -444, 0).FormatterPuro();
@@ -82,11 +82,11 @@ namespace QQSolver.Domain
         {
             var original = new Valor(4, 4444, 0).FormatterPuro();
 
-            if (Operacoes.Raiz)
-            {
-                yield return new Valor(4, Math.Sqrt(4444), 1).FormatterRaiz(original, false);
-                yield return new Valor(4, -Math.Sqrt(4444), 1).FormatterRaiz(original, true);
-            }
+            //if (Operacoes.Raiz)
+            //{
+            //    yield return new Valor(4, Math.Sqrt(4444), 1).FormatterRaiz(original, false);
+            //    yield return new Valor(4, -Math.Sqrt(4444), 1).FormatterRaiz(original, true);
+            //}
 
             yield return original;
             yield return new Valor(4, -4444, 0).FormatterPuro();
@@ -169,28 +169,48 @@ namespace QQSolver.Domain
         private static bool Somar(double v1, double v2, out double resultado)
         {
             resultado = 0;
-            try { resultado = checked(v1 + v2); return true; }
+            try
+            {
+                resultado = checked(v1 + v2);
+                if (resultado == v1 && v2 != 0 || resultado == v2 && v1 != 0) return false;
+                return true;
+            }
             catch (OverflowException) { return false; }
         }
 
         private static bool Multiplicar(double v1, double v2, out double resultado)
         {
             resultado = 0;
-            try { resultado = checked(v1 * v2); return true; }
+            try
+            {
+                resultado = checked(v1 * v2);
+                if (v1 != 0 && v2 != 0 && resultado == 0) return false;
+                return true;
+            }
             catch (OverflowException) { return false; }
         }
 
         private static bool Dividir(double v1, double v2, out double resultado)
         {
             resultado = 0;
-            try { resultado = checked(v1 / v2); return true; }
+            try
+            {
+                resultado = checked(v1 / v2);
+                if (v1 != 0 && resultado == 0) return false;
+                return true;
+            }
             catch (OverflowException) { return false; }
         }
 
         private static bool Exponenciar(double v1, double v2, out double resultado)
         {
             resultado = 0;
-            try { resultado = checked(Math.Pow(v1, v2)); return true; }
+            try
+            {
+                resultado = checked(Math.Pow(v1, v2));
+                if (v1 != 0 && resultado == 0) return false;
+                return true;
+            }
             catch (OverflowException) { return false; }
         }
 
