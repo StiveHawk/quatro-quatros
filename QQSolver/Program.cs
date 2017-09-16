@@ -19,7 +19,7 @@ namespace QQSolver
             sw.Stop();
 
             naturais.EscreverEmArquivo("Naturais.txt");
-            naturais.EscreverEmConsole();
+            //naturais.EscreverEmConsole();
             
             Console.WriteLine($"Processado em {sw.Elapsed.ToString()}");
             Console.ReadLine();

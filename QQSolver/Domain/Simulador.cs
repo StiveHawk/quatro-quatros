@@ -194,24 +194,33 @@ namespace QQSolver.Domain
             catch (OverflowException) { return false; }
         }
 
-        public static IEnumerable<Valor> ListarApenasMelhores()
+        private static IEnumerable<Valor> ListarUnarios()
         {
-            var unarios = ListarUnariosBase().SelectMany(x => x.TodasOperacoes()).ApenasMelhores().Values.ToList();
+            return ListarUnariosBase().SelectMany(x => x.TodasOperacoes());
+        }
 
+        private static IEnumerable<Valor> ListarBinarios(IEnumerable<Valor> unarios)
+        {
             var variacoesBinario =
                 from v1 in unarios
                 from v2 in unarios
                 select ListarOperacao(v1, v2);
 
-            var binarios = variacoesBinario.SelectMany(x => x).Concat(ListarBinarioBase()).SelectMany(x => x.TodasOperacoes()).ApenasMelhores().Values.ToList();
+            return variacoesBinario.SelectMany(x => x).Concat(ListarBinarioBase()).SelectMany(x => x.TodasOperacoes());
+        }
 
+        private static IEnumerable<Valor> ListarTernarios(IEnumerable<Valor> unarios, IEnumerable<Valor> binarios)
+        {
             var variacoesTernarios =
                 from v1 in unarios
                 from v2 in binarios
                 select ListarOperacao(v1, v2);
 
-            var ternarios = variacoesTernarios.SelectMany(x => x).Concat(ListarTernarioBase()).SelectMany(x => x.TodasOperacoes()).ApenasMelhores().Values.ToList();
+            return variacoesTernarios.SelectMany(x => x).Concat(ListarTernarioBase()).SelectMany(x => x.TodasOperacoes());
+        }
 
+        private static IEnumerable<Valor> ListarQuaternarios(IEnumerable<Valor> unarios, IEnumerable<Valor> binarios, IEnumerable<Valor> ternarios)
+        {
             var variacoesQuaternarios1 =
                 from v1 in unarios
                 from v2 in ternarios
@@ -222,44 +231,29 @@ namespace QQSolver.Domain
                 from v2 in binarios
                 select ListarOperacao(v1, v2);
 
-            var quaternariosTodos = variacoesQuaternarios1.Concat(variacoesQuaternarios2).SelectMany(x => x).Concat(ListarQuaternarioBase())
-                .SelectMany(x => x.TodasOperacoes());
+            return variacoesQuaternarios1.Concat(variacoesQuaternarios2).SelectMany(x => x).Concat(ListarQuaternarioBase()).SelectMany(x => x.TodasOperacoes());
+        }
 
-            return quaternariosTodos;
+        public static IEnumerable<Valor> ListarApenasMelhores()
+        {
+            var unarios = ListarUnarios().ApenasMelhores().Values.ToList();
+
+            var binarios = ListarBinarios(unarios).ApenasMelhores().Values.ToList();
+
+            var ternarios = ListarTernarios(unarios, binarios).ApenasMelhores().Values.ToList();
+
+            return ListarQuaternarios(unarios, binarios, ternarios);
         }
 
         public static IEnumerable<Valor> ListarTodos()
         {
-            var unarios = ListarUnariosBase().SelectMany(x => x.TodasOperacoes()).DistinctOperacao().ToList();
+            var unarios = ListarUnarios().DistinctOperacao().ToList();
+            
+            var binarios = ListarBinarios(unarios).DistinctOperacao().ToList();
+            
+            var ternarios = ListarTernarios(unarios, binarios).DistinctOperacao().ToList();
 
-            var variacoesBinario =
-                from v1 in unarios
-                from v2 in unarios
-                select ListarOperacao(v1, v2);
-
-            var binarios = variacoesBinario.SelectMany(x => x).Concat(ListarBinarioBase()).SelectMany(x => x.TodasOperacoes()).DistinctOperacao().ToList();
-
-            var variacoesTernarios =
-                from v1 in unarios
-                from v2 in binarios
-                select ListarOperacao(v1, v2);
-
-            var ternarios = variacoesTernarios.SelectMany(x => x).Concat(ListarTernarioBase()).SelectMany(x => x.TodasOperacoes()).DistinctOperacao().ToList();
-
-            var variacoesQuaternarios1 =
-                from v1 in unarios
-                from v2 in ternarios
-                select ListarOperacao(v1, v2);
-
-            var variacoesQuaternarios2 =
-                from v1 in binarios
-                from v2 in binarios
-                select ListarOperacao(v1, v2);
-
-            var quaternariosTodos = variacoesQuaternarios1.Concat(variacoesQuaternarios2).SelectMany(x => x).Concat(ListarQuaternarioBase())
-                .SelectMany(x => x.TodasOperacoes());
-
-            return quaternariosTodos;
+            return ListarQuaternarios(unarios, binarios, ternarios);
         }
     }
 }
