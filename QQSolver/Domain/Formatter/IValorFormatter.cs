@@ -8,6 +8,8 @@ namespace QQSolver.Domain.Formatter
 {
     public interface IValorFormatter
     {
+        bool ResultadoNegativo { get; }
         string Flush();
+        int Negativacoes();
     }
 }

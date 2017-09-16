@@ -26,8 +26,15 @@ namespace QQSolver.Domain
                 
                 Valor antigo = null;
 
-                if(!MelhoresValores.TryGetValue(resultado, out antigo) || antigo.NivelOperacoes > valor.NivelOperacoes)
+                if
+                (
+                    !MelhoresValores.TryGetValue(resultado, out antigo) ||
+                    antigo.NivelOperacoes > valor.NivelOperacoes ||
+                    (antigo.NivelOperacoes == valor.NivelOperacoes && antigo.Formatter.Negativacoes() > valor.Formatter.Negativacoes())
+                )
+                {
                     MelhoresValores[resultado] = valor;
+                }
             }
         }
 

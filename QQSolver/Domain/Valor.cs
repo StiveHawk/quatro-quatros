@@ -64,7 +64,7 @@ namespace QQSolver.Domain
             }
         }
 
-        public Valor FormatterPuro() { this.Formatter = new UnarioFormatter.PuroFormatter(this); return this; }
+        public Valor FormatterPuro(bool resultadoNegativo) { this.Formatter = new UnarioFormatter.PuroFormatter(this, resultadoNegativo); return this; }
         public Valor FormatterFatorial(Valor original, bool resultadoNegativo) { this.Formatter = new UnarioFormatter.FatorialFormatter(original, resultadoNegativo); return this; }
         public Valor FormatterTermial(Valor original, bool resultadoNegativo) { this.Formatter = new UnarioFormatter.TermialFormatter(original, resultadoNegativo); return this; }
         public Valor FormatterRaiz(Valor original, bool resultadoNegativo) { this.Formatter = new UnarioFormatter.RaizFormatter(original, resultadoNegativo); return this; }

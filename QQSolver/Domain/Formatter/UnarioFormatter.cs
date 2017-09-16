@@ -9,19 +9,38 @@ namespace QQSolver.Domain.Formatter
     public abstract class UnarioFormatter : IValorFormatter
     {
         protected string Resultado;
+        public bool ResultadoNegativo { get; protected set; }
         private Valor Valor;
 
-        public UnarioFormatter(Valor valor)
+        public UnarioFormatter(Valor valor, bool resultadoNegativo)
         {
             Valor = valor;
+            ResultadoNegativo = resultadoNegativo;
+        }
+
+        private int? _negativacoes;
+        public int Negativacoes()
+        {
+            if (_negativacoes == null)
+            {
+                var negativacoes = 0;
+
+                if(Valor.Formatter != this) negativacoes = Valor.Formatter.Negativacoes();
+
+                if (ResultadoNegativo)
+                    _negativacoes = negativacoes + 1;
+                else
+                    _negativacoes = negativacoes;
+            }
+
+            return _negativacoes.Value;
         }
 
         public abstract string Flush();
 
         public class FatorialFormatter : UnarioFormatter
         {
-            private bool ResultadoNegativo;
-            public FatorialFormatter(Valor valor, bool resultadoNegativo) : base(valor) { this.ResultadoNegativo = resultadoNegativo; }
+            public FatorialFormatter(Valor valor, bool resultadoNegativo) : base(valor, resultadoNegativo) { }
             public override string Flush()
             {
                 if (Resultado == null)
@@ -36,8 +55,7 @@ namespace QQSolver.Domain.Formatter
 
         public class RaizFormatter : UnarioFormatter
         {
-            private bool ResultadoNegativo;
-            public RaizFormatter(Valor valor, bool resultadoNegativo) : base(valor) { this.ResultadoNegativo = resultadoNegativo; }
+            public RaizFormatter(Valor valor, bool resultadoNegativo) : base(valor, resultadoNegativo) { }
             public override string Flush()
             {
                 if (Resultado == null)
@@ -52,8 +70,7 @@ namespace QQSolver.Domain.Formatter
 
         public class TermialFormatter : UnarioFormatter
         {
-            private bool ResultadoNegativo;
-            public TermialFormatter(Valor valor, bool resultadoNegativo) : base(valor) { this.ResultadoNegativo = resultadoNegativo; }
+            public TermialFormatter(Valor valor, bool resultadoNegativo) : base(valor, resultadoNegativo) { }
             public override string Flush()
             {
                 if (Resultado == null)
@@ -68,7 +85,7 @@ namespace QQSolver.Domain.Formatter
 
         public class PuroFormatter : UnarioFormatter
         {
-            public PuroFormatter(Valor valor) : base(valor) { }
+            public PuroFormatter(Valor valor, bool resultadoNegativo) : base(valor, resultadoNegativo) { }
             public override string Flush()
             {
                 if (Resultado == null)
@@ -84,6 +101,6 @@ namespace QQSolver.Domain.Formatter
         public static FatorialFormatter Fatorial(Valor valor, bool resultadoNegativo) { return new FatorialFormatter(valor, resultadoNegativo); }
         public static RaizFormatter Raiz(Valor valor, bool resultadoNegativo) { return new RaizFormatter(valor, resultadoNegativo); }
         public static TermialFormatter Termial(Valor valor, bool resultadoNegativo) { return new TermialFormatter(valor, resultadoNegativo); }
-        public static PuroFormatter Puro(Valor valor) { return new PuroFormatter(valor); }
+        public static PuroFormatter Puro(Valor valor, bool resultadoNegativo) { return new PuroFormatter(valor, resultadoNegativo); }
     }
 }

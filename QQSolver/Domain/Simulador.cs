@@ -14,7 +14,7 @@ namespace QQSolver.Domain
 
         private static IEnumerable<Valor> ListarUnariosBase()
         {
-            var original = new Valor(1, 4, 0).FormatterPuro();
+            var original = new Valor(1, 4, 0).FormatterPuro(false);
 
             if (Operacoes.Raiz)
             {
@@ -23,7 +23,7 @@ namespace QQSolver.Domain
             }
 
             yield return original;
-            yield return new Valor(1, -4, 0).FormatterPuro();
+            yield return new Valor(1, -4, 0).FormatterPuro(true);
 
             if (Operacoes.Terminal)
             {
@@ -40,7 +40,7 @@ namespace QQSolver.Domain
 
         private static IEnumerable<Valor> ListarBinarioBase()
         {
-            var original = new Valor(2, 44, 0).FormatterPuro();
+            var original = new Valor(2, 44, 0).FormatterPuro(false);
 
             //if (Operacoes.Raiz)
             //{
@@ -49,7 +49,7 @@ namespace QQSolver.Domain
             //}
 
             yield return original;
-            yield return new Valor(2, -44, 0).FormatterPuro();
+            yield return new Valor(2, -44, 0).FormatterPuro(true);
 
             if (Operacoes.Terminal)
             {
@@ -60,7 +60,7 @@ namespace QQSolver.Domain
 
         private static IEnumerable<Valor> ListarTernarioBase()
         {
-            var original = new Valor(3, 444, 0).FormatterPuro();
+            var original = new Valor(3, 444, 0).FormatterPuro(false);
 
             //if (Operacoes.Raiz)
             //{
@@ -69,7 +69,7 @@ namespace QQSolver.Domain
             //}
 
             yield return original;
-            yield return new Valor(3, -444, 0).FormatterPuro();
+            yield return new Valor(3, -444, 0).FormatterPuro(true);
 
             if (Operacoes.Terminal)
             {
@@ -80,7 +80,7 @@ namespace QQSolver.Domain
 
         private static IEnumerable<Valor> ListarQuaternarioBase()
         {
-            var original = new Valor(4, 4444, 0).FormatterPuro();
+            var original = new Valor(4, 4444, 0).FormatterPuro(false);
 
             //if (Operacoes.Raiz)
             //{
@@ -89,7 +89,7 @@ namespace QQSolver.Domain
             //}
 
             yield return original;
-            yield return new Valor(4, -4444, 0).FormatterPuro();
+            yield return new Valor(4, -4444, 0).FormatterPuro(true);
 
             if (Operacoes.Terminal)
             {

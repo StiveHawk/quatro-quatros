@@ -13,12 +13,28 @@ namespace QQSolver.Domain.Formatter
         private Valor Valor1;
         private Valor Valor2;
         private string Operador;
-        private bool ResultadoNegativo;
+        public bool ResultadoNegativo { get; private set; }
 
         public BinarioFormatter(Valor valor1, Valor valor2)
         {
             Valor1 = valor1;
             Valor2 = valor2;
+        }
+
+        private int? _negativacoes;
+        public int Negativacoes()
+        {
+            if (_negativacoes == null)
+            {
+                var negativacoes = Valor1.Formatter.Negativacoes() + Valor2.Formatter.Negativacoes();
+
+                if (ResultadoNegativo)
+                    _negativacoes = negativacoes + 1;
+                else
+                    _negativacoes = negativacoes;
+            }
+
+            return _negativacoes.Value;
         }
 
         public string Flush()
