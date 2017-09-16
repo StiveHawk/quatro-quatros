@@ -41,7 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domain\Dicionarios.cs" />
     <Compile Include="Domain\ExtensionMethod.cs" />
+    <Compile Include="Domain\Formatter\BinarioFormatter.cs" />
+    <Compile Include="Domain\Formatter\IValorFormatter.cs" />
+    <Compile Include="Domain\Formatter\UnarioFormatter.cs" />
+    <Compile Include="Domain\OutputNaturais.cs" />
+    <Compile Include="Domain\Simulador.cs" />
+    <Compile Include="Domain\SimuladorOperacoes.cs" />
     <Compile Include="Domain\Valor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
