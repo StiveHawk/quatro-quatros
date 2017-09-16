@@ -43,7 +43,10 @@ namespace QQSolver.Domain
                         var resultadoLong = (long)Resultado;
 
                         if (Dicionarios.FatorialHashSet.TryGetValue(resultadoLong, out lAux))
-                            yield return new Valor(Peso, lAux, NivelOperacoes + 1).FormatterFatorial(this);
+                        {
+                            yield return new Valor(Peso, lAux, NivelOperacoes + 1).FormatterFatorial(this, false);
+                            yield return new Valor(Peso, -lAux, NivelOperacoes + 1).FormatterFatorial(this, true);
+                        }
                     }
 
                     if (Simulador.Operacoes.Terminal && Resultado < int.MaxValue && Resultado > 1)
@@ -52,22 +55,25 @@ namespace QQSolver.Domain
                         var resultadoInt = (int)Resultado;
 
                         if (Dicionarios.TermialHashSet.TryGetValue(resultadoInt, out iAux) && iAux != Resultado)
-                            yield return new Valor(Peso, iAux, NivelOperacoes + 1).FormatterTermial(this);
+                        {
+                            yield return new Valor(Peso, iAux, NivelOperacoes + 1).FormatterTermial(this, false);
+                            yield return new Valor(Peso, -iAux, NivelOperacoes + 1).FormatterTermial(this, true);
+                        }
                     }
                 }
             }
         }
 
         public Valor FormatterPuro() { this.Formatter = new UnarioFormatter.PuroFormatter(this); return this; }
-        public Valor FormatterFatorial(Valor original) { this.Formatter = new UnarioFormatter.FatorialFormatter(original); return this; }
-        public Valor FormatterTermial(Valor original) { this.Formatter = new UnarioFormatter.TermialFormatter(original); return this; }
-        public Valor FormatterRaiz(Valor original) { this.Formatter = new UnarioFormatter.RaizFormatter(original); return this; }
+        public Valor FormatterFatorial(Valor original, bool resultadoNegativo) { this.Formatter = new UnarioFormatter.FatorialFormatter(original, resultadoNegativo); return this; }
+        public Valor FormatterTermial(Valor original, bool resultadoNegativo) { this.Formatter = new UnarioFormatter.TermialFormatter(original, resultadoNegativo); return this; }
+        public Valor FormatterRaiz(Valor original, bool resultadoNegativo) { this.Formatter = new UnarioFormatter.RaizFormatter(original, resultadoNegativo); return this; }
 
-        public Valor FormatterSoma(Valor v1, Valor v2) { this.Formatter = BinarioFormatter.Soma(v1, v2); return this; }
-        public Valor FormatterDivisao(Valor v1, Valor v2) { this.Formatter = BinarioFormatter.Divisao(v1, v2); return this; }
-        public Valor FormatterMultiplicacao(Valor v1, Valor v2) { this.Formatter = BinarioFormatter.Multiplicacao(v1, v2); return this; }
-        public Valor FormatterPotenciacao(Valor v1, Valor v2) { this.Formatter = BinarioFormatter.Potenciacao(v1, v2); return this; }
-        public Valor FormatterSubtracao(Valor v1, Valor v2) { this.Formatter = BinarioFormatter.Subtracao(v1, v2); return this; }
+        public Valor FormatterSoma(Valor v1, Valor v2, bool resultadoNegativo) { this.Formatter = BinarioFormatter.Soma(v1, v2, resultadoNegativo); return this; }
+        public Valor FormatterDivisao(Valor v1, Valor v2, bool resultadoNegativo) { this.Formatter = BinarioFormatter.Divisao(v1, v2, resultadoNegativo); return this; }
+        public Valor FormatterMultiplicacao(Valor v1, Valor v2, bool resultadoNegativo) { this.Formatter = BinarioFormatter.Multiplicacao(v1, v2, resultadoNegativo); return this; }
+        public Valor FormatterPotenciacao(Valor v1, Valor v2, bool resultadoNegativo) { this.Formatter = BinarioFormatter.Potenciacao(v1, v2, resultadoNegativo); return this; }
+        //public Valor FormatterSubtracao(Valor v1, Valor v2, bool resultadoNegativo) { this.Formatter = BinarioFormatter.Subtracao(v1, v2, resultadoNegativo); return this; }
 
 
         private IEnumerable<Valor> ThisEnumerable() { yield return this; }

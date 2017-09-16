@@ -13,6 +13,7 @@ namespace QQSolver.Domain.Formatter
         private Valor Valor1;
         private Valor Valor2;
         private string Operador;
+        private bool ResultadoNegativo;
 
         public BinarioFormatter(Valor valor1, Valor valor2)
         {
@@ -23,15 +24,20 @@ namespace QQSolver.Domain.Formatter
         public string Flush()
         {
             if (Resultado == null)
-                Resultado = $"({Valor1.Formatter.Flush()} {Operador} {Valor2.Formatter.Flush()})";
+            {
+                if(ResultadoNegativo)
+                    Resultado = $"-({Valor1.Formatter.Flush()} {Operador} {Valor2.Formatter.Flush()})";
+                else
+                    Resultado = $"({Valor1.Formatter.Flush()} {Operador} {Valor2.Formatter.Flush()})";
+            }
 
             return Resultado;
         }
 
-        public static BinarioFormatter Multiplicacao(Valor valor1, Valor valor2) { return new BinarioFormatter(valor1, valor2) { Operador = "*" }; }
-        public static BinarioFormatter Potenciacao(Valor valor1, Valor valor2) { return new BinarioFormatter(valor1, valor2) { Operador = "^" }; }
-        public static BinarioFormatter Soma(Valor valor1, Valor valor2) { return new BinarioFormatter(valor1, valor2) { Operador = "+" }; }
-        public static BinarioFormatter Subtracao(Valor valor1, Valor valor2) { return new BinarioFormatter(valor1, valor2) { Operador = "-" }; }
-        public static BinarioFormatter Divisao(Valor valor1, Valor valor2) { return new BinarioFormatter(valor1, valor2) { Operador = "/" }; }
+        public static BinarioFormatter Multiplicacao(Valor valor1, Valor valor2, bool resultadoNegativo) { return new BinarioFormatter(valor1, valor2) { Operador = "*", ResultadoNegativo = resultadoNegativo }; }
+        public static BinarioFormatter Potenciacao(Valor valor1, Valor valor2, bool resultadoNegativo) { return new BinarioFormatter(valor1, valor2) { Operador = "^", ResultadoNegativo = resultadoNegativo }; }
+        public static BinarioFormatter Soma(Valor valor1, Valor valor2, bool resultadoNegativo) { return new BinarioFormatter(valor1, valor2) { Operador = "+", ResultadoNegativo = resultadoNegativo }; }
+        public static BinarioFormatter Divisao(Valor valor1, Valor valor2, bool resultadoNegativo) { return new BinarioFormatter(valor1, valor2) { Operador = "/", ResultadoNegativo = resultadoNegativo }; }
+        //public static BinarioFormatter Subtracao(Valor valor1, Valor valor2, bool resultadoNegativo) { return new BinarioFormatter(valor1, valor2) { Operador = "-" }; }
     }
 }

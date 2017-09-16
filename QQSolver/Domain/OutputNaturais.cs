@@ -10,10 +10,12 @@ namespace QQSolver.Domain
     public class OutputNaturais
     {
         public Dictionary<int, Valor> MelhoresValores;
+        public int QuantidadeProcessada;
 
         public OutputNaturais()
         {
             MelhoresValores = new Dictionary<int, Valor>();
+            QuantidadeProcessada = 0;
         }
 
         private void Registrar(Valor valor)
@@ -61,7 +63,10 @@ namespace QQSolver.Domain
             OutputNaturais output = new OutputNaturais();
 
             foreach (var valor in valores)
+            {
                 output.Registrar(valor);
+                output.QuantidadeProcessada++;
+            }
 
             return output;
         }

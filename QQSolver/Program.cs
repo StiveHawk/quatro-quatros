@@ -15,7 +15,7 @@ namespace QQSolver
         {
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            var naturais = OutputNaturais.Processar(Simulador.ListarTodos());
+            var naturais = OutputNaturais.Processar(Simulador.ListarApenasMelhores());
             sw.Stop();
 
             naturais.EscreverEmArquivo("Naturais.txt");

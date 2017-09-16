@@ -22,5 +22,19 @@ namespace QQSolver.Domain
                 }
             }
         }
+
+        public static Dictionary<double, Valor> ApenasMelhores(this IEnumerable<Valor> valores)
+        {
+            var melhores = new Dictionary<double, Valor>();
+
+            foreach (var valor in valores)
+            {
+                Valor antigo = null;
+                if (!melhores.TryGetValue(valor.Resultado, out antigo) || antigo.NivelOperacoes > valor.NivelOperacoes)
+                    melhores[valor.Resultado] = valor;
+            }
+
+            return melhores;
+        }
     }
 }
